@@ -2,7 +2,7 @@ import win32api
 import win32con
 import win32gui
 
-from setting import decimal2RGB, RGB2decimal
+from alpha.setting import decimal2RGB, RGB2decimal
 
 # get display size
 def get_display() :
