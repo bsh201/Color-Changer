@@ -1,35 +1,92 @@
-import win32api
-import win32con
-import win32gui
+import json
 
-from setting import decimal2RGB, RGB2decimal
+import cv2
+import numpy as np
 
-# get display size
-def get_display() :
-    width = win32api.GetSystemMetrics(win32con.SM_CXSCREEN)
-    height = win32api.GetSystemMetrics(win32con.SM_CYSCREEN)
+import pandas as pd
 
-    return width, height
+# image = cv2.imread('image\image.png')
 
-# apply RGB fillter
-def apply_fillter(width=int, 
-                  height=int,
-                  r_intensity=int, 
-                  g_intensity=int, 
-                  b_intensity=int,) :
+# with open ("_INTENSITY.json", "r") as f :
+#     data = json.load(f)
 
-    for x in range(width) :
-        for y in range(height) :
+# data = pd.DataFrame(data)
+# INTENSITY = data['intensity']
 
-            # get pixel value
-            current_color = win32gui.GetPixel(win32gui.GetDC(0), x, y,)
-            red, green, blue = decimal2RGB(current_color)
+################################## [case 1] ##################################
 
-            # change color based on RGB intensity
-            red += r_intensity
-            green += g_intensity
-            blue += b_intensity
-            new_color = RGB2decimal(red=red, green=green, blue=blue)
-            
-            # set pixel value
-            win32gui.SetPixel(win32gui.GetDC(0), x, y, new_color,)
+def make_filter(image, R, G, B) :
+    height, width = image.shape[0], image.shape[1]
+
+    red_filter = np.full((height, width, 3), (R, 0, 0), dtype=np.uint8)
+    green_filter = np.full((height, width, 3), (0, G, 0), dtype=np.uint8)
+    blue_filter = np.full((height, width, 3), (0, 0, B), dtype=np.uint8)
+
+    filter = red_filter + green_filter + blue_filter
+    return filter
+
+def sample_image(image, filter) :
+    blended = cv2.addWeighted(image, 0.8, filter, 0.2, 0)
+    return blended
+
+# image = cv2.resize(image, (800, 333))
+# filter = make_filter(image)
+
+# result = sample_image(image, filter)
+# cv2.imshow('test',result)
+
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+################################## [case 1] ##################################
+
+
+################################## [case 2] ##################################
+
+# def make_red_filter(image) :
+#     img = image.copy()
+#     img[:, :, 0] = 0
+#     img[:, :, 1] = 0
+#     return img
+
+# def make_green_filter(image) :
+#     img = image.copy()
+#     img[:, :, 0] = 0
+#     img[:, :, 2] = 0
+#     return img
+
+# def make_blue_filter(image) :
+#     img = image.copy()
+#     img[:, :, 1] = 0
+#     img[:, :, 2] = 0
+#     return img
+
+# def sample_image(image, INTENSITY) :
+
+#     red_filter = make_red_filter(image)
+#     blue_filter = make_blue_filter(image)
+#     green_filter = make_green_filter(image)
+
+#     blended = image*(1-sum(INTENSITY)) + red_filter*(INTENSITY[0])    \
+#                                     + green_filter*(INTENSITY[1])  \
+#                                     + blue_filter*(INTENSITY[2])
+#     blended = blended.astype(np.uint8)
+#     return blended
+
+# sample_image = sample_image(image, INTENSITY)
+# # sample_image = cv2.resize(sample_image, (800, 333))
+
+# # red_filter = make_red_filter(sample_image)
+# # blue_filter = make_blue_filter(sample_image)
+# # green_filter = make_green_filter(sample_image)
+
+# cv2.imshow('', sample_image)
+# # cv2.imshow('red', red_filter)
+# # cv2.imshow('blue', blue_filter)
+# # cv2.imshow('green', green_filter)
+
+
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+################################## [case 2] ##################################

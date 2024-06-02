@@ -1,21 +1,20 @@
-from filter import get_display, apply_fillter
-import time
 import json
 
-WIDTH, HEIGHT = get_display()
+import cv2
+import numpy as np
 
-# with open ("_INTENSITY.json", "r") as f :
-#     data = json.load(f)
+#get user customed color intensity
+with open ("_COLOR.json", "r") as f :
+    data = json.load(f)
+RED, GREEN, BLUE = data[0]['intensity'], data[1]['intensity'], data[2]['intensity']
 
-# RGB intensity
-INTENSITY = [0,0,0]
+#get video
+video = cv2.VideoCapture(0)
 
-# print("start")
+while(True):
+    # [1] intensity에 따른 필터링
+    # [2] 비디오 output
+    break
 
-apply_fillter(width = WIDTH,
-              height = HEIGHT,
-              r_intensity = INTENSITY[0],
-              g_intensity = INTENSITY[1],
-              b_intensity = INTENSITY[2])
-
-# print("finish")
+video.release()
+cv2.destroyAllWindows()
